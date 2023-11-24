@@ -81,8 +81,6 @@ void vwdlayout_init(Vwdlayout *vb2, Vkstatic *vks, VkhelperImage *image) {
 	vwdlayout_init_rp_layer(vb2, vks);
 	vb2->rebuild_vbuf = true;
 
-	// TODO: mipmap is required
-	// why? because even you use linear minify still cannot work
 	vector_init(&vb2->layers, sizeof(Vwdlayer));
 	vector_resize(&vb2->layers, 1);
 	Vwdlayer *layers = (Vwdlayer*)vb2->layers.p;
@@ -91,7 +89,7 @@ void vwdlayout_init(Vwdlayout *vb2, Vkstatic *vks, VkhelperImage *image) {
 		.sampler = vkhelper_sampler(vks->device),
 	};
 	vkhelper_image_new(
-		&layers[0].image, vks->device, vks->memprop, 1, 1,
+		&layers[0].image, vks->device, vks->memprop, 1, 1, false,
 		VK_FORMAT_B8G8R8A8_UNORM,
 		VK_IMAGE_USAGE_SAMPLED_BIT,
 		VK_IMAGE_ASPECT_COLOR_BIT);

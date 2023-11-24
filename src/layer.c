@@ -98,7 +98,7 @@ void vwdlayout_insert_layer(Vwdlayout *vb2, Vkstatic *vks, size_t ldx,
 	pl->size[1] = sy;
 	pl->sampler = vkhelper_sampler(vks->device);
 	vkhelper_image_new(
-		&pl->image, vks->device, vks->memprop, sx, sy,
+		&pl->image, vks->device, vks->memprop, sx, sy, false,
 		VK_FORMAT_B8G8R8A8_UNORM,
 		VK_IMAGE_USAGE_TRANSFER_SRC_BIT | // save
 			VK_IMAGE_USAGE_TRANSFER_DST_BIT | // load
@@ -111,6 +111,6 @@ void vwdlayout_insert_layer(Vwdlayout *vb2, Vkstatic *vks, size_t ldx,
 		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 		VK_PIPELINE_STAGE_HOST_BIT,
 		VK_PIPELINE_STAGE_HOST_BIT,
-		pl->image.image);
+		pl->image);
 	vkstatic_oneshot_end(cbuf, vks);
 }
