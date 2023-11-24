@@ -23,6 +23,7 @@ static void vwdlayout_init_rp_layer(Vwdlayout *vb2, Vkstatic *vks) {
 	vkhelper_renderpass_config_offscreen(
 		&renderpass_conf,
 		vks->device);
+	renderpass_conf.descs[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	vkhelper_renderpass_build(
 		&vb2->rp_layer,
 		&renderpass_conf,
@@ -87,7 +88,6 @@ void vwdlayout_init(Vwdlayout *vb2, Vkstatic *vks, VkhelperImage *image) {
 	Vwdlayer *layers = (Vwdlayer*)vb2->layers.p;
 	// dummy layer, no specific reason but just reserve 0
 	layers[0] = (Vwdlayer) {
-		.id = -1,
 		.sampler = vkhelper_sampler(vks->device),
 	};
 	vkhelper_image_new(

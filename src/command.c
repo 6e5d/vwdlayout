@@ -80,6 +80,14 @@ void vwdlayout_build_command(
 			vb2->vbufg.buffer, 1, &copy);
 	}
 	vkhelper_viewport_scissor(cbuf, width, height);
+	static const VkClearValue clear_color = {
+		.color.float32 = {0.0f, 0.0f, 0.0f, 0.0f},
+	};
+	static const VkClearValue clear_depthstencil = {
+		.depthStencil.depth = 1.0f,
+		.depthStencil.stencil = 0,
+	};
+	VkClearValue clear_values[2] = {clear_color, clear_depthstencil};
 	VkRenderPassBeginInfo rp_info = {
 		.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
 		.renderPass = vb2->rp_layer,
@@ -88,6 +96,8 @@ void vwdlayout_build_command(
 		.renderArea.offset.y = 0,
 		.renderArea.extent.width = width,
 		.renderArea.extent.height = height,
+		.clearValueCount = 2,
+		.pClearValues = clear_values,
 	};
 	vkCmdBeginRenderPass(cbuf, &rp_info, VK_SUBPASS_CONTENTS_INLINE);
 

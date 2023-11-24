@@ -78,9 +78,8 @@ void vwdlayout_descset_write(Vwdlayout *vb2, VkDevice device) {
 void vwdlayout_layer_info(Vwdlayout *vb2) {
 	printf("===layer info begin===\n");
 	for (size_t ldx = 0; ldx < vb2->layers.len; ldx += 1) {
-		printf("ldx:%zu lid:%d size:%u,%u offset:%d,%d\x1b[0m\n",
+		printf("ldx:%zu size:%u,%u offset:%d,%d\x1b[0m\n",
 			ldx,
-			vwdlayout_ldx(vb2, ldx)->id,
 			vwdlayout_ldx(vb2, ldx)->size[0],
 			vwdlayout_ldx(vb2, ldx)->size[1],
 			vwdlayout_ldx(vb2, ldx)->offset[0],
@@ -89,10 +88,7 @@ void vwdlayout_layer_info(Vwdlayout *vb2) {
 	printf("\n");
 }
 
-// return lid
-// insert above current focus, if no focus, insert on top
-void vwdlayout_insert_layer(Vwdlayout *vb2, Vkstatic *vks,
-	size_t ldx, int32_t lid,
+void vwdlayout_insert_layer(Vwdlayout *vb2, Vkstatic *vks, size_t ldx,
 	int32_t ox, int32_t oy, uint32_t sx, uint32_t sy
 ) {
 	Vwdlayer *pl = (Vwdlayer*)vector_insert(&vb2->layers, ldx);
@@ -101,7 +97,6 @@ void vwdlayout_insert_layer(Vwdlayout *vb2, Vkstatic *vks,
 	pl->size[0] = sx;
 	pl->size[1] = sy;
 	pl->sampler = vkhelper_sampler(vks->device);
-	pl->id = lid;
 	vkhelper_image_new(
 		&pl->image, vks->device, vks->memprop, sx, sy,
 		VK_FORMAT_B8G8R8A8_UNORM,
