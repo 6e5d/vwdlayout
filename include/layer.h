@@ -3,7 +3,6 @@
 #include <stdint.h>
 #include <vulkan/vulkan.h>
 
-#include "../../simpleimg/include/simpleimg.h"
 #include "../../vkhelper/include/image.h"
 #include "../../vkstatic/include/vkstatic.h"
 #include "../../vwdlayer/include/layer.h"

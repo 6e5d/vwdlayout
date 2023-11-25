@@ -3,3 +3,4 @@ vkhelper
 vwdlayer
 vector
 ppath
+dmgrect
