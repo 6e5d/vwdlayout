@@ -5,7 +5,6 @@
 #include <vulkan/vulkan.h>
 
 #include "../../dmgrect/include/dmgrect.h"
-#include "../../ppath/include/ppath.h"
 #include "../../vector/include/vector.h"
 #include "../../vkhelper/include/barrier.h"
 #include "../../vkhelper/include/desc.h"
@@ -38,16 +37,10 @@ static void vwdlayout_init_rp_layer(Vwdlayout *vl, Vkstatic *vks) {
 }
 
 static void vwdlayout_init_pipeline(Vwdlayout *vl, VkDevice device) {
-	char *path = NULL;
 	VkhelperPipelineConfig vpc = {0};
 	vkhelper_pipeline_config(&vpc, 1, 3, 1);
-
-	ppath_rel(&path, __FILE__, "../../shader/layer_vert.spv");
-	vpc.stages[0].module = vkhelper_shader_module(device, path);
-	ppath_rel(&path, __FILE__, "../../shader/layer_frag.spv");
-	vpc.stages[1].module = vkhelper_shader_module(device, path);
-	free(path);
-
+	vkhelper_pipeline_simple_shader(&vpc, device,
+		__FILE__, "../../shader/layer");
 	vpc.vib[0] = (VkVertexInputBindingDescription) {
 		.binding = 0,
 		.stride = sizeof(VwdlayoutVertex),
@@ -85,13 +78,11 @@ void vwdlayout_init(Vwdlayout *vl, Vkstatic *vks, Dmgrect *dmg) {
 	vl->sampler = vkhelper_sampler(vks->device);
 	vl->output.offset[0] = dmg->offset[0];
 	vl->output.offset[1] = dmg->offset[1];
-	vkhelper_image_new(
+	vkhelper_image_new_color(
 		&vl->output.image, vks->device, vks->memprop,
 		dmg->size[0], dmg->size[1], false,
-		VK_FORMAT_B8G8R8A8_UNORM,
 		VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
-			VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
-		VK_IMAGE_ASPECT_COLOR_BIT);
+		VK_IMAGE_USAGE_TRANSFER_SRC_BIT);
 	VkCommandBuffer cbuf = vkstatic_oneshot_begin(vks);
 	vkhelper_barrier(cbuf, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 		VK_PIPELINE_STAGE_HOST_BIT,

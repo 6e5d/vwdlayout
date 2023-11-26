@@ -6,6 +6,7 @@
 #include "../../dmgrect/include/dmgrect.h"
 #include "../../vkhelper/include/barrier.h"
 #include "../../vkhelper/include/dynstate.h"
+#include "../../vkhelper/include/renderpass.h"
 #include "../../vkstatic/include/vkstatic.h"
 #include "../include/command.h"
 #include "../include/vertex.h"
@@ -87,26 +88,8 @@ void vwdlayout_build_command(
 			vl->vbufg.buffer, 1, &copy);
 	}
 	vkhelper_viewport_scissor(cbuf, width, height);
-	static const VkClearValue clear_color = {
-		.color.float32 = {0.0f, 0.0f, 0.0f, 0.0f},
-	};
-	static const VkClearValue clear_depthstencil = {
-		.depthStencil.depth = 1.0f,
-		.depthStencil.stencil = 0,
-	};
-	VkClearValue clear_values[2] = {clear_color, clear_depthstencil};
-	VkRenderPassBeginInfo rp_info = {
-		.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-		.renderPass = vl->rp_layer,
-		.framebuffer = vl->output_fb,
-		.renderArea.offset.x = 0,
-		.renderArea.offset.y = 0,
-		.renderArea.extent.width = width,
-		.renderArea.extent.height = height,
-		.clearValueCount = 2,
-		.pClearValues = clear_values,
-	};
-	vkCmdBeginRenderPass(cbuf, &rp_info, VK_SUBPASS_CONTENTS_INLINE);
+	vkhelper_renderpass_begin_clear(cbuf, vl->rp_layer, vl->output_fb,
+		width, height);
 
 	VkDeviceSize zero = 0;
 	vkCmdBindPipeline(
