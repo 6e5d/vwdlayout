@@ -16,7 +16,7 @@
 #include "../include/layer.h"
 
 Vwdlayer *vwdlayout_ldx(Vwdlayout *vl, size_t ldx) {
-	assert(ldx >= 0 && ldx < vl->layers.len);
+	assert(ldx < vl->layers.len);
 	return vector_offset(&vl->layers, ldx);
 }
 
