@@ -3,7 +3,6 @@
 #include "../../vector/include/vector.h"
 #include "../../vkhelper2/include/vkhelper2.h"
 #include "../../vkstatic/include/vkstatic.h"
-#include "../../vkstatic/include/oneshot.h"
 #include "../include/vwdlayout.h"
 #include "../include/layer.h"
 
