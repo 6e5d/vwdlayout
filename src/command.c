@@ -1,12 +1,7 @@
-#include <assert.h>
-#include <stdio.h>
-#include <stdint.h>
 #include <vulkan/vulkan.h>
 
 #include "../../dmgrect/include/dmgrect.h"
-#include "../../vkhelper/include/barrier.h"
-#include "../../vkhelper/include/dynstate.h"
-#include "../../vkhelper/include/renderpass.h"
+#include "../../vkhelper2/include/vkhelper2.h"
 #include "../../vkstatic/include/vkstatic.h"
 #include "../include/command.h"
 #include "../include/vertex.h"
@@ -87,8 +82,8 @@ void vwdlayout_build_command(
 		vkCmdCopyBuffer(cbuf, vl->vbufc.buffer,
 			vl->vbufg.buffer, 1, &copy);
 	}
-	vkhelper_viewport_scissor(cbuf, width, height);
-	vkhelper_renderpass_begin_clear(cbuf, vl->rp_layer, vl->output_fb,
+	vkhelper2_dynstate_vs(cbuf, width, height);
+	vkhelper2_renderpass_begin_clear(cbuf, vl->rp_layer, vl->output_fb,
 		width, height);
 
 	VkDeviceSize zero = 0;

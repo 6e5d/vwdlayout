@@ -1,15 +1,7 @@
-#include <assert.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <vulkan/vulkan.h>
 
 #include "../../vector/include/vector.h"
-#include "../../vkhelper/include/barrier.h"
-#include "../../vkhelper/include/desc.h"
-#include "../../vkhelper/include/image.h"
-#include "../../vkhelper/include/sampler.h"
+#include "../../vkhelper2/include/vkhelper2.h"
 #include "../../vkstatic/include/vkstatic.h"
 #include "../../vkstatic/include/oneshot.h"
 #include "../include/vwdlayout.h"
@@ -22,8 +14,8 @@ Vwdlayer *vwdlayout_ldx(Vwdlayout *vl, size_t ldx) {
 
 void vwdlayout_descset_init(Vwdlayout *vl, VkDevice device) {
 	uint32_t len = VKBASIC2D_MAX_LAYER;
-	VkhelperDescConfig conf;
-	vkhelper_desc_config(&conf, 1);
+	Vkhelper2DescConfig conf;
+	vkhelper2_desc_config(&conf, 1);
 	VkDescriptorType ty = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 	conf.bindings[0].descriptorType = ty;
 	conf.bindings[0].descriptorCount = len;
@@ -43,7 +35,7 @@ void vwdlayout_descset_init(Vwdlayout *vl, VkDevice device) {
 		.pDescriptorCounts = &len,
 	};
 	conf.allocinfo.pNext = &vdesc_info;
-	vkhelper_desc_build(&vl->layer, &conf, device);
+	vkhelper2_desc_build(&vl->layer, &conf, device);
 }
 
 void vwdlayout_descset_write(Vwdlayout *vl, VkDevice device) {
@@ -93,7 +85,7 @@ void vwdlayout_insert_layer(Vwdlayout *vl, Vkstatic *vks, size_t ldx,
 	Vwdlayer *pl = (Vwdlayer*)vector_insert(&vl->layers, ldx);
 	pl->offset[0] = ox;
 	pl->offset[1] = oy;
-	vkhelper_image_new_color(
+	vkhelper2_image_new_color(
 		&pl->image, vks->device, vks->memprop, sx, sy, false,
 		VK_IMAGE_USAGE_TRANSFER_SRC_BIT | // save
 			VK_IMAGE_USAGE_TRANSFER_DST_BIT | // load
@@ -101,7 +93,7 @@ void vwdlayout_insert_layer(Vwdlayout *vl, Vkstatic *vks, size_t ldx,
 			VK_IMAGE_USAGE_SAMPLED_BIT // render
 	);
 	VkCommandBuffer cbuf = vkstatic_oneshot_begin(vks);
-	vkhelper_barrier(cbuf,
+	vkhelper2_barrier(cbuf,
 		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 		VK_PIPELINE_STAGE_HOST_BIT,
 		VK_PIPELINE_STAGE_HOST_BIT,
