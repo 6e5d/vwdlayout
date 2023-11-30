@@ -10,9 +10,7 @@
 static void vwdlayout_init_rp_layer(Vwdlayout *vl, Vkstatic *vks) {
 	// renderpass layer
 	Vkhelper2RenderpassConfig renderpass_conf;
-	vkhelper2_renderpass_config_offscreen(
-		&renderpass_conf,
-		vks->device);
+	vkhelper2_renderpass_config_offscreen(&renderpass_conf);
 	renderpass_conf.descs[0].initialLayout =
 		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
 	renderpass_conf.descs[0].finalLayout =
