@@ -1,16 +1,11 @@
-#include <assert.h>
 #include <cglm/cglm.h>
-#include <stdlib.h>
-#include <stdint.h>
 #include <vulkan/vulkan.h>
 
 #include "../../dmgrect/include/dmgrect.h"
 #include "../../vector/include/vector.h"
 #include "../../vkhelper2/include/vkhelper2.h"
 #include "../../vkstatic/include/vkstatic.h"
-#include "../include/vertex.h"
 #include "../include/vwdlayout.h"
-#include "../include/layer.h"
 
 static void vwdlayout_init_rp_layer(Vwdlayout *vl, Vkstatic *vks) {
 	// renderpass layer

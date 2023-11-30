@@ -3,8 +3,6 @@
 #include "../../dmgrect/include/dmgrect.h"
 #include "../../vkhelper2/include/vkhelper2.h"
 #include "../../vkstatic/include/vkstatic.h"
-#include "../include/command.h"
-#include "../include/vertex.h"
 #include "../include/vwdlayout.h"
 
 static void p2(vec2 out, float x, float y, float size[2], float offset[2]) {

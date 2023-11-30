@@ -4,7 +4,6 @@
 #include "../../vkhelper2/include/vkhelper2.h"
 #include "../../vkstatic/include/vkstatic.h"
 #include "../include/vwdlayout.h"
-#include "../include/layer.h"
 
 Vwdlayer *vwdlayout_ldx(Vwdlayout *vl, size_t ldx) {
 	assert(ldx < vl->layers.len);
