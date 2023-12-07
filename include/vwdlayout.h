@@ -28,18 +28,18 @@ typedef struct {
 } Vwdlayout;
 
 void vwdlayout_init(Vwdlayout *vl, Vkstatic *vks, Dmgrect *dmg);
-void vwdlayout_deinit(Vwdlayout *vb2, VkDevice device);
+void vwdlayout_deinit(Vwdlayout *vl, VkDevice device);
 
 void vwdlayout_build_command(
-	Vwdlayout *vb2,
+	Vwdlayout *vl,
 	VkDevice device,
 	VkCommandBuffer cbuf);
 
-Vwdlayer *vwdlayout_ldx(Vwdlayout *vb2, size_t ldx);
-void vwdlayout_descset_init(Vwdlayout *vb2, VkDevice device);
-void vwdlayout_descset_write(Vwdlayout *vb2, VkDevice device);
-void vwdlayout_layer_info(Vwdlayout *vb2);
-void vwdlayout_insert_layer(Vwdlayout *vb2, Vkstatic *vks, size_t ldx,
+Vwdlayer *vwdlayout_ldx(Vwdlayout *vl, size_t ldx);
+void vwdlayout_descset_init(Vwdlayout *vl, VkDevice device);
+void vwdlayout_descset_write(Vwdlayout *vl, VkDevice device);
+void vwdlayout_layer_info(Vwdlayout *vl);
+void vwdlayout_insert_layer(Vwdlayout *vl, Vkstatic *vks, size_t ldx,
 	int32_t ox, int32_t oy, uint32_t sx, uint32_t sy);
 
 typedef struct {
