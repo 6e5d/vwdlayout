@@ -34,6 +34,7 @@ void vwdlayout_descset_init(Vwdlayout *vl, VkDevice device) {
 	};
 	conf.allocinfo.pNext = &vdesc_info;
 	vkhelper2_desc_build(&vl->layer, &conf, device);
+	vkhelper2_desc_config_deinit(&conf);
 }
 
 void vwdlayout_descset_write(Vwdlayout *vl, VkDevice device) {
