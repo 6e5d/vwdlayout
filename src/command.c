@@ -64,6 +64,30 @@ static void vwdlayout_build_vbuf(Vwdlayout *vl, VkDevice device) {
 	vkUnmapMemory(device, vl->vbufc.memory);
 }
 
+void vwdlayout_download_output(Vwdlayout *vl, VkCommandBuffer cbuf) {
+	VkOffset3D offset = {0, 0, 0};
+	uint32_t w = vl->output.image.size[0];
+	uint32_t h = vl->output.image.size[1];
+	VkExtent3D extent = {w, h, 1};
+	VkImageSubresourceLayers layers = {
+		.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+		.layerCount = 1,
+	};
+	VkBufferImageCopy icopy = {
+		.bufferOffset = 0,
+		.bufferRowLength = w,
+		.bufferImageHeight = h,
+		.imageSubresource = layers,
+		.imageOffset = offset,
+		.imageExtent = extent,
+	};
+	vkhelper2_barrier_src(cbuf, &vl->output.image);
+	vkCmdCopyImageToBuffer(cbuf, vl->output.image.image,
+		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+		vl->output_buffer.buffer,
+		1, &icopy);
+}
+
 void vwdlayout_build_command(
 	Vwdlayout *vl,
 	VkDevice device,

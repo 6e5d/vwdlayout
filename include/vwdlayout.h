@@ -10,6 +10,7 @@
 #include "../../vkhelper2/include/vkhelper2.h"
 #include "../../vkstatic/include/vkstatic.h"
 #include "../../vwdlayer/include/vwdlayer.h"
+#include "../../simpleimg/include/simpleimg.h"
 
 typedef struct {
 	VkRenderPass rp_layer;
@@ -19,17 +20,18 @@ typedef struct {
 	Vkhelper2Buffer vbufg;
 	Vkhelper2Buffer vbufc;
 	VkSampler sampler;
-	// layer 0/1 are for overlay/preview
-	// TODO: mipmap is useful
 	Vkhelper2Desc layer;
 	Vector layers;
 	Vwdlayer output;
+	Vkhelper2Buffer output_buffer;
+	Simpleimg output_img;
 	VkFramebuffer output_fb;
 } Vwdlayout;
 
 void vwdlayout_init(Vwdlayout *vl, Vkstatic *vks, Dmgrect *dmg);
 void vwdlayout_deinit(Vwdlayout *vl, VkDevice device);
 
+void vwdlayout_download_output(Vwdlayout *vl, VkCommandBuffer cbuf);
 void vwdlayout_build_command(
 	Vwdlayout *vl,
 	VkDevice device,

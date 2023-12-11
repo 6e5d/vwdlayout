@@ -63,6 +63,8 @@ static void vwdlayout_init_pipeline(Vwdlayout *vl, VkDevice device) {
 
 void vwdlayout_init(Vwdlayout *vl, Vkstatic *vks, Dmgrect *dmg) {
 	vl->sampler = vkhelper2_sampler(vks->device);
+
+	// setup output
 	vl->output.offset[0] = dmg->offset[0];
 	vl->output.offset[1] = dmg->offset[1];
 	vkhelper2_image_new_color(
@@ -70,6 +72,14 @@ void vwdlayout_init(Vwdlayout *vl, Vkstatic *vks, Dmgrect *dmg) {
 		dmg->size[0], dmg->size[1], false,
 		VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
 		VK_IMAGE_USAGE_TRANSFER_SRC_BIT);
+	vkhelper2_buffer_init_cpu(
+		&vl->output_buffer, dmg->size[0] * dmg->size[1] * 4,
+		vks->device, vks->memprop);
+	assert(0 == vkMapMemory(vks->device, vl->output_buffer.memory, 0,
+		vl->output_buffer.size, 0, (void**)&vl->output_img.data));
+	vl->output_img.width = dmg->size[0];
+	vl->output_img.height = dmg->size[1];
+
 	VkCommandBuffer cbuf = vkstatic_oneshot_begin(vks);
 	vkhelper2_barrier(cbuf, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 		VK_PIPELINE_STAGE_HOST_BIT,
@@ -114,6 +124,7 @@ void vwdlayout_deinit(Vwdlayout *vl, VkDevice device) {
 		vkhelper2_image_deinit(&layer->image, device);
 	}
 	vkhelper2_image_deinit(&vl->output.image, device);
+	vkhelper2_buffer_deinit(&vl->output_buffer, device);
 	vector_deinit(&vl->layers);
 	vkhelper2_buffer_deinit(&vl->vbufc, device);
 	vkhelper2_buffer_deinit(&vl->vbufg, device);

@@ -3,3 +3,4 @@ vkhelper2
 vwdlayer
 vector
 dmgrect
+simpleimg
