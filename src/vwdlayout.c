@@ -27,7 +27,7 @@ static void vwdlayout_init_pipeline(Vwdlayout *vl, VkDevice device) {
 	Vkhelper2PipelineConfig vpc = {0};
 	vkhelper2_pipeline_config(&vpc, 1, 3, 1);
 	vkhelper2_pipeline_simple_shader(&vpc, device,
-		__FILE__, "../../shader/layer");
+		__FILE__, "../../vwdraw_shaders/build/layer");
 	vpc.vib[0] = (VkVertexInputBindingDescription) {
 		.binding = 0,
 		.stride = sizeof(VwdlayoutVertex),

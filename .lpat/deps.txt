@@ -4,3 +4,4 @@ vwdlayer
 vector
 dmgrect
 simpleimg
+vwdraw_shaders
