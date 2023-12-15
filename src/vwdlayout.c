@@ -7,7 +7,7 @@
 #include "../../vkstatic/include/vkstatic.h"
 #include "../include/vwdlayout.h"
 
-static void vwdlayout_init_rp_layer(Vwdlayout *vl, Vkstatic *vks) {
+static void vwdlayout_init_rp_layer(Vwdlayout *vl, VkDevice device) {
 	// renderpass layer
 	Vkhelper2RenderpassConfig renderpass_conf;
 	vkhelper2_renderpass_config_offscreen(&renderpass_conf);
@@ -19,7 +19,7 @@ static void vwdlayout_init_rp_layer(Vwdlayout *vl, Vkstatic *vks) {
 	vkhelper2_renderpass_build(
 		&vl->rp_layer,
 		&renderpass_conf,
-		vks->device
+		device
 	);
 }
 
@@ -86,7 +86,7 @@ void vwdlayout_init(Vwdlayout *vl, Vkstatic *vks, Dmgrect *dmg) {
 		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
 		&vl->output.image);
 	vkstatic_oneshot_end(cbuf, vks);
-	vwdlayout_init_rp_layer(vl, vks);
+	vwdlayout_init_rp_layer(vl, vks->device);
 	vl->rebuild_vbuf = true;
 
 	vector_init(&vl->layers, sizeof(Vwdlayer));
