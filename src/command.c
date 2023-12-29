@@ -36,7 +36,7 @@ static void vwdlayout_build_vbuf(Vwdlayout *vl, VkDevice device) {
 		(float)vl->output.offset[1],
 	};
 	for (size_t i = 0; i < vl->layers.len; i += 1) {
-		Vwdlayer *l = vector_offset(&vl->layers, i);
+		Vwdlayer *l = vector(offset)(&vl->layers, i);
 		float x0 = (float)l->offset[0];
 		float y0 = (float)l->offset[1];
 		float x1 = (float)l->offset[0] + (float)l->image.size[0];

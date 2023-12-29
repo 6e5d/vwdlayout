@@ -2,7 +2,7 @@
 #include <vulkan/vulkan.h>
 
 #include "../../dmgrect/include/dmgrect.h"
-#include "../../vector/include/vector.h"
+#include "../../vector/build/vector.h"
 #include "../../vkhelper2/include/vkhelper2.h"
 #include "../../vkstatic/include/vkstatic.h"
 #include "../include/vwdlayout.h"
@@ -89,7 +89,7 @@ void vwdlayout_init(Vwdlayout *vl, Vkstatic *vks, Dmgrect *dmg) {
 	vwdlayout_init_rp_layer(vl, vks->device);
 	vl->rebuild_vbuf = true;
 
-	vector_init(&vl->layers, sizeof(Vwdlayer));
+	vector(init)(&vl->layers, sizeof(Vwdlayer));
 	vkhelper2_buffer_init_cpu(
 		&vl->vbufc, sizeof(VwdlayoutVertex) * VKBASIC2D_MAX_LAYER * 6,
 		vks->device, vks->memprop);
@@ -120,12 +120,12 @@ void vwdlayout_deinit(Vwdlayout *vl, VkDevice device) {
 	vkhelper2_desc_deinit(&vl->layer, device);
 	vkDestroySampler(device, vl->sampler, NULL);
 	for (size_t i = 0; i < vl->layers.len; i += 1) {
-		Vwdlayer *layer = vector_offset(&vl->layers, i);
+		Vwdlayer *layer = vector(offset)(&vl->layers, i);
 		vkhelper2_image_deinit(&layer->image, device);
 	}
 	vkhelper2_image_deinit(&vl->output.image, device);
 	vkhelper2_buffer_deinit(&vl->output_buffer, device);
-	vector_deinit(&vl->layers);
+	vector(deinit)(&vl->layers);
 	vkhelper2_buffer_deinit(&vl->vbufc, device);
 	vkhelper2_buffer_deinit(&vl->vbufg, device);
 	vkDestroyRenderPass(device, vl->rp_layer, NULL);

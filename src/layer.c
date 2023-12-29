@@ -1,13 +1,13 @@
 #include <vulkan/vulkan.h>
 
-#include "../../vector/include/vector.h"
+#include "../../vector/build/vector.h"
 #include "../../vkhelper2/include/vkhelper2.h"
 #include "../../vkstatic/include/vkstatic.h"
 #include "../include/vwdlayout.h"
 
 Vwdlayer *vwdlayout_ldx(Vwdlayout *vl, size_t ldx) {
 	assert(ldx < vl->layers.len);
-	return vector_offset(&vl->layers, ldx);
+	return vector(offset)(&vl->layers, ldx);
 }
 
 void vwdlayout_descset_init(Vwdlayout *vl, VkDevice device) {
@@ -81,7 +81,7 @@ void vwdlayout_layer_info(Vwdlayout *vl) {
 void vwdlayout_insert_layer(Vwdlayout *vl, Vkstatic *vks, size_t ldx,
 	int32_t ox, int32_t oy, uint32_t sx, uint32_t sy
 ) {
-	Vwdlayer *pl = (Vwdlayer*)vector_insert(&vl->layers, ldx);
+	Vwdlayer *pl = (Vwdlayer*)vector(insert)(&vl->layers, ldx);
 	pl->offset[0] = ox;
 	pl->offset[1] = oy;
 	vkhelper2_image_new_color(

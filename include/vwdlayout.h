@@ -6,7 +6,7 @@
 #include <vulkan/vulkan.h>
 
 #include "../../dmgrect/include/dmgrect.h"
-#include "../../vector/include/vector.h"
+#include "../../vector/build/vector.h"
 #include "../../vkhelper2/include/vkhelper2.h"
 #include "../../vkstatic/include/vkstatic.h"
 #include "../../vwdlayer/include/vwdlayer.h"
@@ -21,7 +21,7 @@ typedef struct {
 	Vkhelper2Buffer vbufc;
 	VkSampler sampler;
 	Vkhelper2Desc layer;
-	Vector layers;
+	Vector() layers;
 	Vwdlayer output;
 	Vkhelper2Buffer output_buffer;
 	Simpleimg output_img;
