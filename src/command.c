@@ -1,8 +1,3 @@
-#include <vulkan/vulkan.h>
-
-#include "../../dmgrect/include/dmgrect.h"
-#include "../../vkhelper2/include/vkhelper2.h"
-#include "../../vkstatic/include/vkstatic.h"
 #include "../include/vwdlayout.h"
 
 static void p2(vec2 out, float x, float y, float size[2], float offset[2]) {
@@ -23,8 +18,8 @@ static void uv(vec2 out, float x, float y) {
 	out[1] = y;
 }
 
-static void vwdlayout_build_vbuf(Vwdlayout *vl, VkDevice device) {
-	VwdlayoutVertex* target;
+static void vwdlayout(build_vbuf)(Vwdlayout() *vl, VkDevice device) {
+	Vwdlayout(Vertex)* target;
 	assert(0 == vkMapMemory(device, vl->vbufc.memory, 0,
 		vl->vbufc.size, 0, (void**)&target));
 	float size[2] = {
@@ -36,7 +31,7 @@ static void vwdlayout_build_vbuf(Vwdlayout *vl, VkDevice device) {
 		(float)vl->output.offset[1],
 	};
 	for (size_t i = 0; i < vl->layers.len; i += 1) {
-		Vwdlayer *l = vector(offset)(&vl->layers, i);
+		Vwdlayer() *l = vector(offset)(&vl->layers, i);
 		float x0 = (float)l->offset[0];
 		float y0 = (float)l->offset[1];
 		float x1 = (float)l->offset[0] + (float)l->image.size[0];
@@ -64,7 +59,7 @@ static void vwdlayout_build_vbuf(Vwdlayout *vl, VkDevice device) {
 	vkUnmapMemory(device, vl->vbufc.memory);
 }
 
-void vwdlayout_download_output(Vwdlayout *vl, VkCommandBuffer cbuf) {
+void vwdlayout(download_output)(Vwdlayout() *vl, VkCommandBuffer cbuf) {
 	VkOffset3D offset = {0, 0, 0};
 	uint32_t w = vl->output.image.size[0];
 	uint32_t h = vl->output.image.size[1];
@@ -81,31 +76,31 @@ void vwdlayout_download_output(Vwdlayout *vl, VkCommandBuffer cbuf) {
 		.imageOffset = offset,
 		.imageExtent = extent,
 	};
-	vkhelper2_barrier_src(cbuf, &vl->output.image);
+	vkhelper2(barrier_src)(cbuf, &vl->output.image);
 	vkCmdCopyImageToBuffer(cbuf, vl->output.image.image,
 		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 		vl->output_buffer.buffer,
 		1, &icopy);
 }
 
-void vwdlayout_build_command(
-	Vwdlayout *vl,
+void vwdlayout(build_command)(
+	Vwdlayout() *vl,
 	VkDevice device,
 	VkCommandBuffer cbuf) {
 	uint32_t width = vl->output.image.size[0];
 	uint32_t height = vl->output.image.size[1];
 	if (vl->rebuild_vbuf) {
 		printf("rebuild vbuf %zu\n", vl->layers.len);
-		vwdlayout_build_vbuf(vl, device);
+		vwdlayout(build_vbuf)(vl, device);
 		vl->rebuild_vbuf = false;
 		VkBufferCopy copy = {
-			.size = vl->layers.len * 6 * sizeof(VwdlayoutVertex)
+			.size = vl->layers.len * 6 * sizeof(Vwdlayout(Vertex))
 		};
 		vkCmdCopyBuffer(cbuf, vl->vbufc.buffer,
 			vl->vbufg.buffer, 1, &copy);
 	}
-	vkhelper2_dynstate_vs(cbuf, width, height);
-	vkhelper2_renderpass_begin_clear(cbuf, vl->rp_layer, vl->output_fb,
+	vkhelper2(dynstate_vs)(cbuf, width, height);
+	vkhelper2(renderpass_begin_clear)(cbuf, vl->rp_layer, vl->output_fb,
 		width, height);
 
 	VkDeviceSize zero = 0;
